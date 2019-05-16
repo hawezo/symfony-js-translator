@@ -1,0 +1,13 @@
+{
+  "name": "symfony-js-translator",
+  "version": "0.0.1",
+  "description": "A translator package to use your Symfony translations with.",
+  "main": "translator.js",
+  "author": "Enzo Innocenzi <enzo.inno@gmail.com> (https://hawezo.xyz)",
+  "license": "MIT",
+  "keywords": [ "symfony", "translation", "bundle", "javascript" ],
+  "homepage": "https://github.com/hawezo/symfony-js-translator",
+  "bugs": {
+    "url": "https://github.com/hawezo/symfony-js-translator/issues"
+  }
+}
