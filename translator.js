@@ -47,6 +47,11 @@ const DefaultSettings = {
 	onUntranslatedMessageCallback: (_id, _domain, _locale) => {},
 
 	/**
+	 * Will display console messages if set to yes.
+	 */
+	debug: false,
+
+	/**
      * A catalogue to be loaded by default.
      */
 	catalogue: {},
@@ -119,7 +124,7 @@ class Translator {
      *
      * @return {string} The translated string
      */
-	trans(id, parameters, domain, locale) {
+	trans(id, parameters = {}, domain, locale) {
 		this.assertInitialized();
 
 		try {
@@ -131,7 +136,9 @@ class Translator {
 
 			return _message;
 		} catch (error) {
-			console.warn(error);
+			if (this.settings.debug) {
+				console.warn(error);
+			}
 			return id;
 		}
 	}
@@ -419,17 +426,23 @@ class Translator {
 		let _catalogue = this.catalogue;
 
 		if (!(locale in _catalogue)) {
-			console.log(`${locale} not in catalogue`);
+			if (this.settings.debug) {
+				console.log(`Locale '${locale}' not in catalogue '${_catalogue}'`);
+			}
 			return false;
 		}
 
 		if (!(domain in _catalogue[locale])) {
-			console.log(`domain ${domain} not in ${locale}`);
+			if (this.settings.debug) {
+				console.log(`Domain '${domain}' is not in locale '${locale}'`);
+			}
 			return false;
 		}
 
 		if (!(id in _catalogue[locale][domain])) {
-			console.log(`id ${id} not in ${domain}`);
+			if (this.settings.debug) {
+				console.log(`Message '${id}' is not in domain '${domain}' (${locale})`);
+			}
 			return false;
 		}
 
@@ -555,11 +568,15 @@ class Translator {
 					if (domain in catalogue[locale]) {
 						_catalogue[locale][domain] = catalogue[locale][domain];
 					} else {
-						console.warn(`'${domain}' does not exist in the catalogue for the '${locale}' locale.`);
+						if (this.settings.debug) {
+							console.warn(`'${domain}' does not exist in the catalogue for the '${locale}' locale.`);
+						}
 					}
 				}
 			} else {
-				console.warn(`Skipped locales '${locale}' as it is not in the current catalogue.`);
+				if (this.settings.debug) {
+					console.warn(`Skipped locales '${locale}' as it is not in the current catalogue.`);
+				}
 			}
 		}
 
