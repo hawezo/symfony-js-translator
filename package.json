@@ -5,9 +5,18 @@
   "main": "translator.js",
   "author": "Enzo Innocenzi <enzo.inno@gmail.com> (https://hawezo.xyz)",
   "license": "MIT",
-  "keywords": [ "symfony", "translation", "bundle", "javascript" ],
+  "keywords": [
+    "symfony",
+    "translation",
+    "bundle",
+    "javascript"
+  ],
   "homepage": "https://github.com/hawezo/symfony-js-translator",
   "bugs": {
     "url": "https://github.com/hawezo/symfony-js-translator/issues"
+  },
+  "repository": "https://github.com/hawezo/symfony-js-translator.git",
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
