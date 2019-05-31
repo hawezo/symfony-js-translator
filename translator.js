@@ -124,7 +124,7 @@ class Translator {
      *
      * @return {string} The translated string
      */
-	trans(id, parameters = {}, domain, locale) {
+	trans(id, parameters = {}, domain = undefined, locale = undefined) {
 		this.assertInitialized();
 
 		try {
