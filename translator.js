@@ -75,10 +75,15 @@ class Translator {
 		this.loadCatalogue();
 	}
 
-	assertInitialized() {
+	isInitialized() {
 		if (true !== this.initialized) {
-			throw new Error('The catalogue is not initialized.');
+			if (this.settings.debug) {
+				console.error('The catalogue is not initialized.');
+			}
+			return false;
 		}
+        
+		return true;
 	}
 
 	/**
@@ -125,7 +130,9 @@ class Translator {
      * @return {string} The translated string
      */
 	trans(id, parameters = {}, domain = undefined, locale = undefined) {
-		this.assertInitialized();
+		if (!this.isInitialized()) {
+			return;
+		}
 
 		try {
 			let _message,
@@ -153,7 +160,9 @@ class Translator {
      * @return {string} Translated message.
      */
 	getMessage(id, domain, locale) {
-		this.assertInitialized();
+		if (!this.isInitialized()) {
+			return;
+		}
 
 		let _locales = [ locale || this.currentLocale, this.settings.fallbackLocale ],
 			_domain = domain || this.settings.defaultDomain,
@@ -421,7 +430,9 @@ class Translator {
      * @return {boolean} `true` if message exists, `false` if not.
      */
 	hasMessage(id, domain, locale) {
-		this.assertInitialized();
+		if (!this.isInitialized()) {
+			return;
+		}
 
 		let _catalogue = this.catalogue;
 
@@ -482,7 +493,10 @@ class Translator {
 			break;
 
 		default:
-			throw new Error('Invalid load type.');
+			if (this.settings.debug) {
+				console.error('Invalid load type.');
+			}
+			return;
 		}
 
 		return this;
@@ -495,7 +509,10 @@ class Translator {
      */
 	loadFromCatalogue() {
 		if (isEmpty(this.settings.catalogue)) {
-			throw new Error('The given catalogue is empty.');
+			if (this.settings.debug) {
+				console.error('The given catalogue is empty.');
+			}
+			return;
 		}
         
 		this.catalogue = this.settings.catalogue;
@@ -513,7 +530,10 @@ class Translator {
 		let meta = document.head.querySelector('[name=translation][content]') || undefined;
 
 		if (undefined === meta) {
-			throw new Error('The translation meta could not be found.');
+			if (this.settings.debug) {
+				console.error('The translation meta could not be found.');
+			}
+			return;
 		}
 
 		this.catalogue = JSON.parse(meta.content);
@@ -526,7 +546,9 @@ class Translator {
      * @param {string} locale 
      */
 	getDomains(locale) {
-		this.assertInitialized();
+		if (!this.isInitialized()) {
+			return;
+		}
 
 		let catalogue = this.catalogue,
 			_domains = [];
@@ -549,7 +571,9 @@ class Translator {
      * @param {*} locale 
      */
 	getCatalogue(domains, locales) {
-		this.assertInitialized();
+		if (!this.isInitialized()) {
+			return;
+		}
 
 		let catalogue = this.catalogue,
 			_catalogue = {};
