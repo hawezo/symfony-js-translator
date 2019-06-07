@@ -1,6 +1,6 @@
 {
   "name": "symfony-js-translator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A translator package to use your Symfony translations with.",
   "main": "translator.js",
   "author": "Enzo Innocenzi <enzo.inno@gmail.com> (https://hawezo.xyz)",

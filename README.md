@@ -11,5 +11,9 @@ This package is based on [@willdurand](https://github.com/willdurand)'s work.
 Changelogs
 ==========
 
-**05/06/2019** (0.4)
+**07/06/2019** (0.0.5)
++ Added Vue plugin (see .getVuePlugin())
+- Fixed an error message
+
+**05/06/2019** (0.0.4)
 - Wrapped errors in debug closures

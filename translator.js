@@ -59,7 +59,12 @@ const DefaultSettings = {
 	/**
      * The character separating multiple translations for pluralization.
      */
-	pluralSeparator: '|',
+    pluralSeparator: '|',
+    
+    /**
+     * The name of the Vue directive for translating.
+     */
+    vueDirectiveName: 'trans',
 
 	sPluralRegex: new RegExp(/^\w+: +(.+)$/),
 	cPluralRegex: new RegExp(/^\s*((\{\s*(-?\d+[\s*,\s*\-?\d+]*)\s*\})|([[\]])\s*(-Inf|-?\d+)\s*,\s*(\+?Inf|-?\d+)\s*([[\]]))\s?(.+?)$/),
@@ -438,7 +443,7 @@ class Translator {
 
 		if (!(locale in _catalogue)) {
 			if (this.settings.debug) {
-				console.log(`Locale '${locale}' not in catalogue '${_catalogue}'`);
+				console.log(`Locale '${locale}' is not in current catalogue.`);
 			}
 			return false;
 		}
@@ -651,6 +656,65 @@ class Translator {
 		}
 
 		return null;
+	}
+    
+    /**
+     * Returns the Vue plugin.
+     * 
+     * Usage:
+     * 
+     * ```
+     *  import Translator from 'symfony-js-translator';
+     * 
+     *  const translator = Translator.getVuePlugin();
+     *  Vue.use(translator);
+     * 
+     *  new Vue({
+     *      // ...
+     *  });
+     * ```
+     */
+    getVuePlugin() {
+        const that = this;
+
+        const translationDirective = (el, binding) => {
+            let val = binding.value,
+                key,
+                domain,
+                locale,
+                parameters;
+
+            switch (typeof val) {
+                case 'string':
+                    key = val;
+                    break;
+
+                case 'object':
+                    try {
+                        key = val.key;
+                        domain = val.domain;
+                        locale = val.locale;
+                        parameters = val.parameters;
+                    } catch (error) {
+                        if (that.settings.debug) {
+                            console.error('Invalid value for `trans` directive.', error);
+                        }
+                        return;
+                    }
+            }
+
+            el.innerHTML = that.trans(key, parameters, domain, locale);
+        };
+
+        const getCatalogueMethod = function(domains, locales) {
+            return that.getCatalogue(domains, locales);
+        }
+
+        return {
+            install(Vue) {
+                Vue.directive(that.settings.vueDirectiveName, translationDirective);
+            }
+        };        
 	}
 }
 
